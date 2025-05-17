@@ -6,7 +6,7 @@ const Auth = () => {
   const [showLogin, setShowLogin] = useState(true);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 gap-12">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 gap-12 font-mono">
       <div>
         <h1 className="text-3xl font-bold mb-6">Welcome to Our App</h1>
 

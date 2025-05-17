@@ -40,7 +40,7 @@ const Login = () => {
     const testToken = "jwt-token";
     localStorage.setItem("jwtToken", testToken);
     console.log("Logged in as test user");
-    window.location.href = "/home";
+    window.location.href = "/home/notes";
   };
 
   return (
