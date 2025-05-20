@@ -8,7 +8,7 @@ const Login = () => {
       password: formData.get("password"),
     };
 
-    fetch("http://localhost:5000/auth/login", {
+    fetch("http://localhost:4001/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,11 +22,16 @@ const Login = () => {
 
         const result = await response.json();
         const token = result.token;
+        const user = result.user;
+        if (!user) {
+          throw new Error("User not found in response");
+        }
 
         if (token) {
           localStorage.setItem("jwtToken", token);
+          localStorage.setItem("user", JSON.stringify(user));
           console.log("Login successful");
-          window.location.href = "/home";
+          window.location.href = "/home/notes";
         } else {
           console.error("Token not found in response");
         }
@@ -97,6 +102,12 @@ const Login = () => {
         >
           Login as Test User
         </button>
+        <p className="mt-8 text-gray-600">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-blue-500 hover:text-blue-700">
+            Sign Up
+          </a>
+        </p>
       </form>
     </div>
   );

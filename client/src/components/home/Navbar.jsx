@@ -35,21 +35,23 @@ const Navbar = () => {
     window.location.href = "/";
   };
   return (
-    <div className="bg-black/25 backdrop-blur-lg w-full text-gray-200 px-10 py-4 flex justify-between items-center text-lg absolute top-0 left-0 z-10 h-18 ">
-      <h1 className="text-emerald-500 font-bold">Jotdown</h1>
-      <div className="flex gap-10">
-        <h2 className="cursor-pointer" onClick={handleNotes}>
-          Notes
-        </h2>
-        <h2 className="cursor-pointer" onClick={handleTodo}>
-          Todo
-        </h2>
-      </div>
-      <div
-        onClick={handleLogout}
-        className="border-[0.5px] border-gray-500 px-4 py-1 rounded-lg hover:bg-gray-500 transition-all cursor-pointer text-white duration-200 hover:scale-95"
-      >
-        Logout
+    <div className="bg-black/25 w-full backdrop-blur-lg absolute top-0 left-0 z-10 h-18 flex justify-center">
+      <div className="w-[70vw] text-gray-200 py-4 flex justify-between items-center text-lg min-w-[600px]">
+        <h1 className="text-emerald-500 font-bold">Jotdown</h1>
+        <div className="flex gap-10">
+          <h2 className="cursor-pointer" onClick={handleNotes}>
+            Notes
+          </h2>
+          <h2 className="cursor-pointer" onClick={handleTodo}>
+            Todo
+          </h2>
+        </div>
+        <div
+          onClick={handleLogout}
+          className="border-[0.5px] border-gray-500 px-4 py-1 rounded-lg hover:bg-gray-500 transition-all cursor-pointer text-white duration-200 hover:scale-95"
+        >
+          Logout
+        </div>
       </div>
     </div>
   );

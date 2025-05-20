@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -10,7 +12,7 @@ const Signup = () => {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    fetch("https:localhost:5000/auth/signup", {
+    fetch("http://localhost:4001/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,17 +20,22 @@ const Signup = () => {
       body: JSON.stringify(data),
     })
       .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Signup failed");
-        }
 
         const result = await response.json();
+
+        console.log(result);
+
         const token = result.token;
+        const user = result.user;
+        if (!user) {
+          throw new Error("User not found in response");
+        }
 
         if (token) {
           localStorage.setItem("jwtToken", token);
-          console.log("Account created and token stored");
-          window.location.href = "/home"
+          localStorage.setItem("user", JSON.stringify(user));
+          console.log("Signup successful");
+          navigate("/home/notes");
         } else {
           console.error("Token not found in response");
         }
@@ -97,6 +104,12 @@ const Signup = () => {
         >
           Create Account
         </button>
+        <p className="mt-8 text-gray-600">
+          Already have an account?{" "}
+          <a href="/login" className="text-blue-500 hover:text-blue-700">
+            Log In
+          </a>
+        </p>
       </form>
     </div>
   );
