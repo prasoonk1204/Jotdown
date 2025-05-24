@@ -2,21 +2,7 @@
 
 @layer utilities {
     .scrollbar::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-  
-    .scrollbar::-webkit-scrollbar-track {
-      background: #00000000;
-      border-radius: 10px;
-    }
-  
-    .scrollbar::-webkit-scrollbar-thumb {
-      background: #4f4e5e;
-      border-radius: 10px;
-    }
-  
-    .scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #3a3945;
+      width: 0px;
+      height: 0px;
     }
   }

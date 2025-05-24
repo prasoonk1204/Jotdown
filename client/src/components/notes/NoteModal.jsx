@@ -35,6 +35,7 @@ const NoteModal = ({ note, onClose, onSave, isNew }) => {
             <input
               type="text"
               name="title"
+              placeholder="Title"
               value={editedNote.title}
               onChange={handleChange}
               className="text-2xl font-bold bg-transparent border-b border-gray-600 focus:outline-none w-[80%]"

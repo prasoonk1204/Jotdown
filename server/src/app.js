@@ -8,6 +8,7 @@ const app = express()
 
 import authRouter from "./routes/auth.js"
 import notesRouter from "./routes/notes.js"
+import todosRouter from "./routes/todo.js";
 import authMiddleware from "./middleware/auth.js"
 
 app.use(
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use("/auth", authRouter)
 app.use("/notes", authMiddleware, notesRouter)
+app.use("/todos", authMiddleware, todosRouter)
 
 connectDB()
   .then(() => {

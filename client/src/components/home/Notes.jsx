@@ -136,6 +136,9 @@ const Notes = () => {
         </button>
       </div>
 
+      {notes.length === 0 ? (
+        <p className="text-gray-400">No notes yet.</p>
+      ) : (
       <div>
         {notes.map((note) => (
           <div
@@ -162,6 +165,7 @@ const Notes = () => {
           </div>
         ))}
       </div>
+      )}
 
       {selectedNote && (
         <NoteModal
