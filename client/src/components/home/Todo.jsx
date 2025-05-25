@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4001";
+
 const Checkbox = ({ checked, onChange }) => (
   <label className="inline-flex items-center cursor-pointer group">
     <input
@@ -73,7 +75,7 @@ const Todo = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:4001/todos?sort=createdAt&order=desc`,
+        `${BACKEND_URL}/todos?sort=createdAt&order=desc`,
         {
           headers: { Authorization: `Bearer ${getToken()}` },
         }
@@ -95,7 +97,7 @@ const Todo = () => {
   const handleAdd = async () => {
     if (!newTask.trim()) return;
     try {
-      const res = await fetch("http://localhost:4001/todos", {
+      const res = await fetch(`${BACKEND_URL}/todos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +116,7 @@ const Todo = () => {
 
   const handleToggle = async (todo) => {
     try {
-      const res = await fetch(`http://localhost:4001/todos/${todo._id}`, {
+      const res = await fetch(`${BACKEND_URL}/todos/${todo._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +137,7 @@ const Todo = () => {
   const handleDelete = async (id) => {
     setDeletingId(id);
     try {
-      const res = await fetch(`http://localhost:4001/todos/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/todos/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${getToken()}`,
@@ -177,44 +179,43 @@ const Todo = () => {
           Add
         </button>
       </div>
-      
-      {(activeTodos.length === 0)||(completedTodos.length === 0)  ? (
+
+      {activeTodos.length === 0 && completedTodos.length === 0 ? (
         <p className="text-gray-400">No todos yet.</p>
       ) : (
         <div>
-      {activeTodos.map((todo) => (
-        <TodoItem
-          key={todo._id}
-          todo={todo}
-          handleToggle={handleToggle}
-          handleDelete={handleDelete}
-          deletingId={deletingId}
-        />
-      ))}
+          {activeTodos.map((todo) => (
+            <TodoItem
+              key={todo._id}
+              todo={todo}
+              handleToggle={handleToggle}
+              handleDelete={handleDelete}
+              deletingId={deletingId}
+            />
+          ))}
 
-      {completedTodos.length > 0 && (
-        <div className="mt-6">
-          <button
-            onClick={() => setShowCompleted((prev) => !prev)}
-            className="text-sm text-emerald-400 hover:underline mb-2"
-          >
-            {showCompleted ? "Hide" : "Show"} completed tasks (
-            {completedTodos.length})
-          </button>
-          {showCompleted &&
-            completedTodos.map((todo) => (
-              <TodoItem
-                key={todo._id}
-                todo={todo}
-                handleToggle={handleToggle}
-                handleDelete={handleDelete}
-                deletingId={deletingId}
-              />
-            ))}
+          {completedTodos.length > 0 && (
+            <div className="mt-6">
+              <button
+                onClick={() => setShowCompleted((prev) => !prev)}
+                className="text-sm text-emerald-400 hover:underline mb-2"
+              >
+                {showCompleted ? "Hide" : "Show"} completed tasks (
+                {completedTodos.length})
+              </button>
+              {showCompleted &&
+                completedTodos.map((todo) => (
+                  <TodoItem
+                    key={todo._id}
+                    todo={todo}
+                    handleToggle={handleToggle}
+                    handleDelete={handleDelete}
+                    deletingId={deletingId}
+                  />
+                ))}
+            </div>
+          )}
         </div>
-      )}
-      
-      </div>
       )}
     </div>
   );

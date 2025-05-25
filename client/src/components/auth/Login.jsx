@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4001";
+
 const Login = () => {
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -8,7 +13,7 @@ const Login = () => {
       password: formData.get("password"),
     };
 
-    fetch("http://localhost:4001/auth/login", {
+    fetch(`${BACKEND_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,72 +46,59 @@ const Login = () => {
       });
   };
 
-  const loginAsTestUser = () => {
-    const testToken = "jwt-token";
-    localStorage.setItem("jwtToken", testToken);
-    console.log("Logged in as test user");
-    window.location.href = "/home/notes";
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-      <h1 className="text-3xl font-bold mb-6">Login</h1>
-
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-zinc-800 to-zinc-950 text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md"
+        className="bg-black/25 backdrop-blur-xl border border-zinc-700 rounded-xl px-8 py-10 w-full max-w-md shadow-2xl"
       >
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+        <h1 className="text-3xl font-bold text-emerald-500 text-center mb-8">
+          Jotdown Login
+        </h1>
+
+        <div className="mb-6">
+          <label htmlFor="email" className="block mb-2 text-sm font-medium">
             Email
           </label>
           <input
             id="email"
             type="email"
             name="email"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your email"
+            placeholder="abc@gmail.com"
             required
+            className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-bold mb-2"
-          >
+          <label htmlFor="password" className="block mb-2 text-sm font-medium">
             Password
           </label>
           <input
             id="password"
             type="password"
             name="password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Enter your password"
+            placeholder="********"
             required
+            className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mb-4"
+          className="w-full bg-emerald-600 hover:bg-emerald-500 transition-all duration-200 text-white font-bold py-2 px-4 rounded-lg hover:scale-95"
         >
           Log In
         </button>
 
-        {/* Bypass button */}
-        <button
-          type="button"
-          onClick={loginAsTestUser}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-        >
-          Login as Test User
-        </button>
-        <p className="mt-8 text-gray-600">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-blue-500 hover:text-blue-700">
+        <p className="mt-10 text-center text-sm text-gray-400">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-emerald-400 hover:underline hover:text-emerald-300"
+          >
             Sign Up
-          </a>
+          </span>
         </p>
       </form>
     </div>

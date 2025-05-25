@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
 import NoteModal from "../notes/NoteModal";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4001";
+
 const Notes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const noteId = searchParams.get("note");
@@ -16,7 +18,7 @@ const Notes = () => {
     const fetchNotes = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:4001/notes", {
+        const res = await fetch(`${BACKEND_URL}/notes`, {
           headers: {
             Authorization: `Bearer ${getToken()}`,
           },
@@ -63,7 +65,7 @@ const Notes = () => {
 
       let res;
       if (isNewNote) {
-        res = await fetch("http://localhost:4001/notes", {
+        res = await fetch(`${BACKEND_URL}/notes`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,7 +77,7 @@ const Notes = () => {
           }),
         });
       } else {
-        res = await fetch(`http://localhost:4001/notes/${updatedNote._id}`, {
+        res = await fetch(`${BACKEND_URL}/notes/${updatedNote._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -107,7 +109,7 @@ const Notes = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:4001/notes/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/notes/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${getToken()}`,
