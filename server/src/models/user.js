@@ -24,35 +24,23 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    validate(value) {
-      if (!validator.isStrongPassword(value)) {
-        throw new Error("Enter a strong password " + value);
-      }
+    validate: {
+      validator: function (value) {
+        return this.isNew ? validator.isStrongPassword(value) : true;
+      },
+      message: (props) => `Password is not strong: ${props.value}`,
     },
   },
 });
 
-
 userSchema.methods.getJWT = async function () {
-  const user = this;
-
-  const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
-
-  return token;
 };
 
-userSchema.methods.verifyPassword = async function (passwordInputByUser) {
-  const user = this;
-  const passwordHash = user.password;
-
-  const isPasswordValid = await bcrypt.compare(
-    passwordInputByUser,
-    passwordHash
-  );
-
-  return isPasswordValid;
+userSchema.methods.verifyPassword = async function (passwordInput) {
+  return await bcrypt.compare(passwordInput, this.password);
 };
 
 const User = mongoose.model("User", userSchema);

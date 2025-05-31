@@ -4,19 +4,21 @@ import bcrypt from "bcrypt";
 
 const authRouter = express.Router();
 
+// Signup route
 authRouter.post("/signup", async (req, res) => {
   try {
-    console.log(req.body);
+    console.log("Signup request:", req.body);
 
     const { name, email, password } = req.body;
 
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already registered" });
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const user = new User({
-      name,
-      email,
-      password: passwordHash,
-    });
+    const user = new User({ name, email, password: passwordHash });
     await user.save();
 
     const token = await user.getJWT();
@@ -31,25 +33,28 @@ authRouter.post("/signup", async (req, res) => {
       },
     });
   } catch (err) {
-    res
-      .status(400)
-      .json({ error: "Error while creating user: " + err.message });
+    console.error("Signup error:", err.message);
+    res.status(400).json({ error: "Signup failed: " + err.message });
   }
 });
 
 authRouter.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    console.log("Login request:", req.body);
 
-    const user = await User.findOne({ email: email });
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
     if (!user) {
-      throw new Error("Invalid Credentials");
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const isPasswordValid = await user.verifyPassword(password);
-
     if (!isPasswordValid) {
-      throw new Error("Invalid Credentials");
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const token = await user.getJWT();
@@ -64,7 +69,8 @@ authRouter.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).send("Error while creating user : " + err.message);
+    console.error("Login error:", err.message);
+    res.status(400).json({ error: "Login failed: " + err.message });
   }
 });
 
