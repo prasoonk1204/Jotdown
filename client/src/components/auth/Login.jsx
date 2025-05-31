@@ -14,6 +14,7 @@ const Login = () => {
     };
 
     fetch(`${BACKEND_URL}/auth/login`, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

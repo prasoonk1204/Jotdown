@@ -17,6 +17,7 @@ const Signup = () => {
     };
 
     fetch(`${BACKEND_URL}/auth/signup`, {
+      credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",

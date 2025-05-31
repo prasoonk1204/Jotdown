@@ -19,6 +19,7 @@ const Notes = () => {
       setLoading(true);
       try {
         const res = await fetch(`${BACKEND_URL}/notes`, {
+          credentials: "include",
           headers: {
             Authorization: `Bearer ${getToken()}`,
           },
@@ -66,6 +67,7 @@ const Notes = () => {
       let res;
       if (isNewNote) {
         res = await fetch(`${BACKEND_URL}/notes`, {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -78,6 +80,7 @@ const Notes = () => {
         });
       } else {
         res = await fetch(`${BACKEND_URL}/notes/${updatedNote._id}`, {
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -110,6 +113,7 @@ const Notes = () => {
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`${BACKEND_URL}/notes/${id}`, {
+        credentials: "include",
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${getToken()}`,

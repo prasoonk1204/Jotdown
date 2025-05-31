@@ -77,6 +77,7 @@ const Todo = () => {
       const res = await fetch(
         `${BACKEND_URL}/todos?sort=createdAt&order=desc`,
         {
+          credentials: "include",
           headers: { Authorization: `Bearer ${getToken()}` },
         }
       );
@@ -98,6 +99,7 @@ const Todo = () => {
     if (!newTask.trim()) return;
     try {
       const res = await fetch(`${BACKEND_URL}/todos`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,6 +119,7 @@ const Todo = () => {
   const handleToggle = async (todo) => {
     try {
       const res = await fetch(`${BACKEND_URL}/todos/${todo._id}`, {
+        credentials: "include",
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -138,6 +141,7 @@ const Todo = () => {
     setDeletingId(id);
     try {
       const res = await fetch(`${BACKEND_URL}/todos/${id}`, {
+        credentials: "include",
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${getToken()}`,
