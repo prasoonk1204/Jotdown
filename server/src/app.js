@@ -19,6 +19,7 @@ app.use(
   })
 );
 
+const PORT = process.env.PORT || 4001;
 
 app.use(express.json())
 
@@ -32,8 +33,8 @@ app.use("/todos", authMiddleware, todosRouter)
 connectDB()
   .then(() => {
     console.log("Database connected");
-    app.listen(4001, () => {
-      console.log("Server is running on port 4001");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
