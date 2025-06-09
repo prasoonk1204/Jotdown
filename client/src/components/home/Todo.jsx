@@ -51,7 +51,7 @@ const TodoItem = ({ todo, handleToggle, handleDelete, deletingId }) => {
       <button
         onClick={() => handleDelete(todo._id)}
         disabled={deletingId === todo._id}
-        className={`bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 ${
+        className={`bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px] ${
           deletingId === todo._id ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
@@ -65,7 +65,6 @@ const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [showCompleted, setShowCompleted] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
@@ -85,7 +84,7 @@ const Todo = () => {
       const data = await res.json();
       setTodos(data);
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
     } finally {
       setLoading(false);
     }
@@ -96,7 +95,9 @@ const Todo = () => {
   }, []);
 
   const handleAdd = async () => {
-    if (!newTask.trim()) return;
+    if (!newTask.trim()) {
+      window.alert("Can't add empty task")
+      return};
     try {
       const res = await fetch(`${BACKEND_URL}/todos`, {
         credentials: "include",
@@ -112,7 +113,7 @@ const Todo = () => {
       setTodos((prev) => [added, ...prev]);
       setNewTask("");
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
     }
   };
 
@@ -133,7 +134,7 @@ const Todo = () => {
         prev.map((t) => (t._id === updated._id ? updated : t))
       );
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
     }
   };
 
@@ -150,8 +151,9 @@ const Todo = () => {
       if (!res.ok) throw new Error("Failed to delete todo");
       setTodos((prev) => prev.filter((todo) => todo._id !== id));
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
     } finally {
+      window.alert("Task deleted successfully")
       setDeletingId(null);
     }
   };
@@ -159,16 +161,15 @@ const Todo = () => {
   const activeTodos = todos.filter((todo) => !todo.done);
   const completedTodos = todos.filter((todo) => todo.done);
 
-  if (loading) return <p>Loading todos...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
+  if (loading) return <p className="text-white/80 self-center w-[70vw]">Loading todos...</p>;
 
   return (
-    <div className="text-white bg-black/25 backdrop-blur-2xl w-[70vw] p-4 rounded-lg h-screen overflow-y-scroll scrollbar self-center">
+    <div className="text-white bg-black/25 backdrop-blur-2xl w-[90vw] md:w-[70vw] p-4 rounded-lg h-screen overflow-y-scroll scrollbar self-center">
       <div className="flex justify-between mb-4">
         <h1 className="text-2xl font-bold">To-Do List</h1>
       </div>
 
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <input
           type="text"
           value={newTask}
@@ -178,7 +179,7 @@ const Todo = () => {
         />
         <button
           onClick={handleAdd}
-          className="bg-emerald-500 px-4 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-200 hover:scale-95"
+          className="bg-emerald-500 px-6 py-2 rounded-lg hover:bg-emerald-600 transition-all duration-200 hover:scale-95"
         >
           Add
         </button>

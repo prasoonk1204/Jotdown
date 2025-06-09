@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams, useNavigate } from "react-router";
 import NoteModal from "../notes/NoteModal";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4001";
 
 const Notes = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const noteId = searchParams.get("note");
 
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const getToken = () => localStorage.getItem("jwtToken");
 
@@ -28,7 +28,8 @@ const Notes = () => {
         const data = await res.json();
         setNotes(data);
       } catch (err) {
-        setError(err.message);
+        window.alert(err.message);
+        navigate("/home/notes");
       } finally {
         setLoading(false);
       }
@@ -106,7 +107,12 @@ const Notes = () => {
 
       setSearchParams({ note: newNoteData._id });
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
+      if (!updatedNote._id) {
+        setNotes((prev) => prev.filter((n) => n.id !== "temp-id"));
+        setSearchParams({});
+      }
+      navigate("/home/notes");
     }
   };
 
@@ -122,16 +128,20 @@ const Notes = () => {
       if (!res.ok) throw new Error("Failed to delete note");
       setNotes((prev) => prev.filter((note) => (note._id ?? note.id) !== id));
       if (noteId === id) closeNote();
+      window.alert("Note deleted successfully");
     } catch (err) {
-      setError(err.message);
+      window.alert(err.message);
+      navigate("/home/notes");
     }
   };
 
-  if (loading) return <p>Loading notes...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
+  if (loading)
+    return (
+      <p className="text-white/80 self-center w-[70vw]">Loading notes...</p>
+    );
 
   return (
-    <div className="text-white bg-black/25 backdrop-blur-2xl w-[70vw] p-4 rounded-lg h-screen overflow-y-scroll scrollbar self-center">
+    <div className="text-white bg-black/25 backdrop-blur-2xl w-[90vw] md:w-[70vw] p-4 rounded-lg h-screen overflow-y-scroll scrollbar self-center">
       <div className="flex justify-between mb-4">
         <h1 className="text-2xl font-bold">Notes</h1>
         <button
@@ -145,32 +155,32 @@ const Notes = () => {
       {notes.length === 0 ? (
         <p className="text-gray-400">No notes yet.</p>
       ) : (
-      <div>
-        {notes.map((note) => (
-          <div
-            key={note._id ?? note.id}
-            className="bg-black/25 p-4 my-2 rounded-lg"
-          >
-            <div className="flex w-full justify-between items-center">
-              <h2 className="text-xl font-bold">{note.title}</h2>
-              <div className="flex gap-4">
-                <button
-                  className="bg-gray-600 px-4 py-2 border-[0.5px] border-gray-600 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95"
-                  onClick={() => openNote(note)}
-                >
-                  View
-                </button>
-                <button
-                  className="bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95"
-                  onClick={() => handleDelete(note._id ?? note.id)}
-                >
-                  Delete
-                </button>
+        <div>
+          {notes.map((note) => (
+            <div
+              key={note._id ?? note.id}
+              className="bg-black/25 p-4 my-2 rounded-lg"
+            >
+              <div className="flex w-full justify-between items-center">
+                <h2 className="text-xl font-bold">{note.title}</h2>
+                <div className="flex gap-4">
+                  <button
+                    className="bg-gray-600 px-4 py-2 border-[0.5px] border-gray-600 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px]"
+                    onClick={() => openNote(note)}
+                  >
+                    View
+                  </button>
+                  <button
+                    className="bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px]"
+                    onClick={() => handleDelete(note._id ?? note.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       )}
 
       {selectedNote && (
