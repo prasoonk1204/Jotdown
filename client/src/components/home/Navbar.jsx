@@ -19,9 +19,9 @@ const Navbar = () => {
     const headings = document.querySelectorAll("h2[data-tab]");
     headings.forEach((heading) => {
       if (heading.dataset.tab === activeTab) {
-        heading.classList.add("font-bold", "text-white");
+        heading.classList.add("font-bold", "text-white", "border-b");
       } else {
-        heading.classList.remove("font-bold", "text-white");
+        heading.classList.remove("font-bold", "text-white", "border-b");
       }
     });
   };
@@ -49,7 +49,7 @@ const Navbar = () => {
         </div>
         <div
           onClick={handleLogout}
-          className="border-[0.5px] border-gray-500 px-4 py-1 rounded-lg hover:bg-gray-500 transition-all cursor-pointer text-white duration-200 hover:scale-95 order-2 sm:order-3"
+          className="border-[0.5px] border-gray-500 px-4 py-1 rounded-lg hover:bg-gray-500 transition-all cursor-pointer text-white duration-200 hover:scale-95 order-2 sm:order-3 "
         >
           Logout
         </div>

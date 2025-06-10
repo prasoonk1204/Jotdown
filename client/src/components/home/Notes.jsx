@@ -161,17 +161,19 @@ const Notes = () => {
               key={note._id ?? note.id}
               className="bg-black/25 p-4 my-2 rounded-lg"
             >
-              <div className="flex w-full justify-between items-center">
-                <h2 className="text-xl font-bold">{note.title}</h2>
+              <div className="flex w-full justify-between sm:items-center flex-col sm:flex-row gap-4 sm:gap-0">
+                <h2 className="font-bold text-[16px] sm:text-lg md:text-xl overflow-hidden">
+                  {note.title}
+                </h2>
                 <div className="flex gap-4">
                   <button
-                    className="bg-gray-600 px-4 py-2 border-[0.5px] border-gray-600 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px]"
+                    className="bg-gray-600 px-4 py-2 border-[0.5px] border-gray-600 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px] w-full "
                     onClick={() => openNote(note)}
                   >
                     View
                   </button>
                   <button
-                    className="bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px]"
+                    className="bg-black/25 px-4 py-2 border-[0.5px] border-gray-500 rounded-lg cursor-pointer hover:bg-gray-700 transition-all duration-200 hover:scale-95 text-sm sm:text-[16px] w-full"
                     onClick={() => handleDelete(note._id ?? note.id)}
                   >
                     Delete

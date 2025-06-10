@@ -32,12 +32,12 @@ const TodoItem = ({ todo, handleToggle, handleDelete, deletingId }) => {
   const formattedDate = new Date(todo.createdAt).toLocaleString();
 
   return (
-    <div className="bg-black/25 p-4 my-2 rounded-lg flex justify-between items-center">
-      <div className="flex items-center gap-4">
+    <div className="bg-black/25 p-4 my-2 rounded-lg flex justify-between sm:items-center flex-col sm:flex-row gap-3">
+      <div className="flex items-center gap-4 overflow-hidden">
         <Checkbox checked={todo.done} onChange={() => handleToggle(todo)} />
         <div>
           <span
-            className={`text-lg block ${
+            className={`text-[16px] sm:text-lg block  ${
               todo.done ? "line-through text-gray-400" : ""
             }`}
           >
@@ -165,9 +165,6 @@ const Todo = () => {
 
   return (
     <div className="text-white bg-black/25 backdrop-blur-2xl w-[90vw] md:w-[70vw] p-4 rounded-lg h-screen overflow-y-scroll scrollbar self-center">
-      <div className="flex justify-between mb-4">
-        <h1 className="text-2xl font-bold">To-Do List</h1>
-      </div>
 
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <input
@@ -175,7 +172,7 @@ const Todo = () => {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           placeholder="New task..."
-          className="flex-grow p-2 rounded bg-zinc-800 border border-gray-600 text-white focus:outline-none"
+          className="flex-grow p-2 rounded-lg bg-zinc-800 border border-gray-600 text-white focus:outline-none"
         />
         <button
           onClick={handleAdd}
